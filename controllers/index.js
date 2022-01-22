@@ -131,6 +131,21 @@ document.querySelector('#btnCapNhatThongTin').onclick = function () {
     nhanVien.heSoChucVu = document.querySelector("#chucVu").value;
     nhanVien.chucVu = infoChucVu();
 
+    //thực hiện lệnh kiểm tra cú pháp người dùng nhập vào
+    var valid = true;
+
+    //kiểm tra người dùng có nhập vào hay không
+    valid &= validator.kiemTraRong(nhanVien.tenNhanVien, '#error_required_tenNhanVien', 'Tên nhân viên ') & validator.kiemTraRong(nhanVien.luongCoBan, '#error_required_luongCB', 'Lương cơ bản ') & validator.kiemTraRong(nhanVien.soGioLamTrongThang, '#error_required_gioLam', 'Số giờ làm ');
+
+    //kiểm tra tính hợp lệ của dữ liệu người dùng nhập vào:
+
+    valid &= validator.kiemTraMaNV(nhanVien.maNhanVien, '#error_number_maNhanVien', 'Mã nhân viên ') & validator.kiemTraKyTu(nhanVien.tenNhanVien, '#error_allLetter_tenNhanVien', 'Tên nhân viên chứa ') & validator.kiemTraLuongNV(nhanVien.luongCoBan, '#error_number_luongCB', 'Lương cơ bản ') & validator.kiemTraSoGioLamNV(nhanVien.soGioLamTrongThang, '#error_number_gioLam', 'Số giờ làm');
+
+    if (!valid) {
+        return;
+    }
+
+
     //gọi api cập nhật thông tin nhân viên
     var promise = axios({
         url: 'http://svcy.myclass.vn/api/QuanLyNhanVienApi/CapNhatThongTinNhanVien?maNhanVien=' + nhanVien.maNhanVien,
